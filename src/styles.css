@@ -44,7 +44,7 @@ button{
 }
 
 img{
-    max-width:50%;
+    max-width:100%;
     height:auto
 }
 
@@ -386,7 +386,10 @@ input.au-input.au-input-xl{
  * Header Mobile Section
  * ----------------------------
  */
-
+.logosize{
+    width: 66%;
+    height: 60px;
+}
 .header-mobile{
     position:absolute;
     top:0;
@@ -719,9 +722,15 @@ table.table.table-bordered th{
     font-weight:800;
     color:#0da8e4
 }
+
 .detail-section{
     margin-top:60px
 }
+
+.detail-img{
+    width: 30%;
+}
+
 /**/
 
 /* 
@@ -1034,5 +1043,5 @@ footer ul li{
         border:0;
         padding:8px 0
     }
+    
 }
-/* You can add global styles to this file, and also import other style files */
