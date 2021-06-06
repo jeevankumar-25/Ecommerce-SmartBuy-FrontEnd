@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { Country } from 'src/app/common/country';
+import { State } from 'src/app/common/state';
+import { SmartBuyFormService } from 'src/app/services/smart-buy-form.service';
+
 
 @Component({
   selector: 'app-checkout',
@@ -12,8 +16,17 @@ export class CheckoutComponent implements OnInit {
 
   totalPrice: number = 0;
   totalQuantity: number = 0;
+
+  creditCardYears: number[] = [];
+  creditCardMonths: number[] = [];
   
-  constructor(private formBuilder: FormBuilder) { }
+  countries:Country[]=[];
+
+  shippingAddressStates:State[] =[];
+  billingAddressStates:State[] =[];
+
+  constructor(private formBuilder: FormBuilder,
+    private smartBuyFormService : SmartBuyFormService ) { }
 
   ngOnInit(): void {
     
@@ -46,6 +59,35 @@ export class CheckoutComponent implements OnInit {
         expirationYear: ['']
       })
     });
+
+    //populate credit card months
+    const startMonth: number = new Date().getMonth() + 1;
+    console.log("startMonth: " + startMonth);
+
+    this.smartBuyFormService.getCreditCardMonths(startMonth).subscribe(
+      data => {
+        console.log("Retrieved credit card months: " + JSON.stringify(data));
+        this.creditCardMonths = data;
+      }
+    );
+    //populate credit card years
+
+    
+    this.smartBuyFormService.getCreditCardYears().subscribe(
+      data => {
+        console.log("Retrieved credit card years: " + JSON.stringify(data));
+        this.creditCardYears = data;
+      }
+    );
+     //populate countries
+     this.smartBuyFormService.getCountries().subscribe(
+       data =>{
+         console.log("Retrieved countries:" +JSON.stringify(data));
+         this.countries=data;
+       }
+
+     );
+  
   }
 
   copyShippingAddressToBillingAddress(event) {
@@ -53,9 +95,12 @@ export class CheckoutComponent implements OnInit {
     if (event.target.checked) {
       this.checkoutFormGroup.controls.billingAddress
             .setValue(this.checkoutFormGroup.controls.shippingAddress.value);
+
+            this.billingAddressStates=this.shippingAddressStates;
     }
     else {
       this.checkoutFormGroup.controls.billingAddress.reset();
+      this.billingAddressStates=[];
     }
     
   }
@@ -64,5 +109,58 @@ export class CheckoutComponent implements OnInit {
     console.log("Handling the submit button");
     console.log(this.checkoutFormGroup.get('customer').value);
     console.log("The email address is " + this.checkoutFormGroup.get('customer').value.email);
+  
+    console.log("The shipping address  country is "+this.checkoutFormGroup.get('shippingAddress').value.country.name);
+    console.log("The shipping address  country is "+this.checkoutFormGroup.get('shippingAddress').value.state.name);
   }
+  
+  handleMonthsAndYears(){
+    const creditCardFormGroup = this.checkoutFormGroup.get('creditCard');
+
+    const currentYear: number = new Date().getFullYear();
+    const selectedYear: number =Number(creditCardFormGroup.value.expirationYear);
+    //if the current year equals the select year ,then start with the current month
+
+    let startMonth: number;
+
+    if(currentYear === selectedYear){
+          startMonth =new Date().getMonth()+1;
+
+    }
+    else{
+      startMonth=1;
+    }
+    this.smartBuyFormService.getCreditCardMonths(startMonth).subscribe(
+      data =>{
+        console.log("Retrieved credit card months:" + JSON.stringify(data));
+        this.creditCardMonths = data;
+      }
+    );
+  }
+
+
+  getStates(formGroupName: string){
+    const formGroup=this.checkoutFormGroup.get(formGroupName);
+
+    const countryCode = formGroup.value.country.code;
+    const countryName = formGroup.value.country.name; 
+
+    console.log(`${formGroupName} country code: ${countryCode}`);
+    console.log(`${formGroupName} country name: ${countryName}`);
+
+    this.smartBuyFormService.getStates(countryCode).subscribe(
+      data =>{
+        if(formGroupName =='shippingAddress'){
+          this.shippingAddressStates= data;
+        }
+        else{
+          this.billingAddressStates = data;
+        }
+        //select first as default by default
+        formGroup.get('state').setValue(data[0]);
+
+      }
+    );
+  }
+
 }
