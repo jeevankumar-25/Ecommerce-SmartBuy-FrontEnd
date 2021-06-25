@@ -20,7 +20,7 @@ export class ProductCategoryMenuComponent implements OnInit {
    this.productService.getProductCategories().subscribe(
      data => {
        console.log('product Categories' +JSON.stringify(data));
-     this.productCategories=data;
+       this.productCategories=data;
       }
    ); 
   }

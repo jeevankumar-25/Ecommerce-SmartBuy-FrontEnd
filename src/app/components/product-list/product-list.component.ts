@@ -37,7 +37,7 @@ export class ProductListComponent implements OnInit {
   listProducts() {
 
     this.searchMode = this.route.snapshot.paramMap.has('keyword');
-
+  //const hasCategoryId:boolean =this.route.snapshot.paramMap.has('id');
     if (this.searchMode) {
       this.handleSearchProducts();
     }
