@@ -45,7 +45,7 @@
 
                             </div>
 
-                            <button (click)="remove(tempCartItem)" class="btn btn-primary ml-2 mt-2 ">Remove</button>
+                            <button (click)="remove(tempCartItem)" class="cartbt">Remove</button>
 
                             <p class="mt-2">Subtotal: {{ tempCartItem.quantity * tempCartItem.unitPrice | currency: 'INR' }}</p>
                         </td>
@@ -57,7 +57,7 @@
                             <p>Total Quantity: {{ totalQuantity }}</p>
                             <p>Shipping: FREE</p>
                             <p>Total Price: {{ totalPrice | currency: 'INR' }}</p>
-                        <a routerLink="/checkout" class="btn btn-primary">Checkout</a>
+                            <a routerLink="/checkout" class="cartbt cartct">Checkout</a>
                         </td>
                     </tr>
 
@@ -67,7 +67,7 @@
 
             <!-- if cart is empty then display a message -->
             <div *ngIf="cartItems.length == 0" class="alert alert-warning col-md-12" role="alert">
-                Your shopping cart is empty. 
+                Your shopping cart is empty.
             </div>
 
         </div>

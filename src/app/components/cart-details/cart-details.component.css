@@ -1,0 +1,14 @@
+.cartbt {
+    background-color: #24a0ed;
+    border-radius: 6px;
+    color: white;
+}
+
+.cartct {
+    text-decoration: none;
+    overflow: hidden;
+}
+
+.ov {
+    overflow: hidden;
+}
