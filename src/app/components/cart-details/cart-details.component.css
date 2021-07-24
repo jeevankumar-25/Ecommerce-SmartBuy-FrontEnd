@@ -1,6 +1,8 @@
 .cartbt {
     background-color: #24a0ed;
     border-radius: 6px;
+    margin-top: 5px;
+    padding: 5px;
     color: white;
 }
 
